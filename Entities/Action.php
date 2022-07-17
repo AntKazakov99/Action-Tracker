@@ -102,4 +102,19 @@ class Action
     {
         return str_pad($this->getElapsedMinutes(), 2, "0", STR_PAD_LEFT);
     }
+
+    public function getYear(): int
+    {
+        return date_parse($this->date)['year'];
+    }
+
+    public function getMonth(): int
+    {
+        return date_parse($this->date)['month'];
+    }
+
+    public function getDay(): int
+    {
+        return date_parse($this->date)['day'];
+    }
 }

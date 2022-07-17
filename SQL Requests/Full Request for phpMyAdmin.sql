@@ -84,3 +84,22 @@ BEGIN
     WHERE Actions.date BETWEEN startDate AND endDate;
 END//
 DELIMITER ;
+
+DROP PROCEDURE IF EXISTS StrProc_GetActionsByMonth;
+DELIMITER //
+CREATE PROCEDURE StrProc_GetActionsByMonth
+(
+    IN  month   INTEGER,
+    IN  year    INTEGER
+)
+BEGIN
+    SELECT Actions.id,
+           Actions.taskUrl,
+           Actions.date,
+           Actions.startTime,
+           Actions.endTime
+    FROM Actions
+    WHERE YEAR(Actions.date) = year
+      AND MONTH(Actions.date) = month;
+END//
+DELIMITER ;

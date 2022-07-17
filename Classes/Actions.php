@@ -4,11 +4,35 @@ namespace Tracker\Classes;
 
 include_once $_SERVER['DOCUMENT_ROOT'] . '/Entities/Action.php';
 
+
 class Actions
 {
     static public function GetAllActions(): array
     {
         $query = 'CALL StrProc_GetAllActions()';
+
+        $ini = parse_ini_file($_SERVER['DOCUMENT_ROOT'] . '/Data/config.ini');
+        $mysqli = new \mysqli($ini['hostname'], $ini['username'], $ini['password'], $ini['database']);
+        $queryResult = $mysqli->query($query);
+
+        $actions = [];
+        while ($row = $queryResult->fetch_assoc())
+        {
+            $actions[] = new \Tracker\Entities\Action(
+                (int) $row['id'],
+                $row['taskUrl'],
+                $row['date'],
+                $row['startTime'],
+                $row['endTime']
+            );
+        }
+
+        return $actions;
+    }
+
+    static public function GetActionsByMonth(int $month, int $year): array
+    {
+        $query = "CALL StrProc_GetActionsByMonth(\"{$year}\", \"{$month}\")";
 
         $ini = parse_ini_file($_SERVER['DOCUMENT_ROOT'] . '/Data/config.ini');
         $mysqli = new \mysqli($ini['hostname'], $ini['username'], $ini['password'], $ini['database']);
