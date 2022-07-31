@@ -21,6 +21,34 @@ CREATE TABLE IF NOT EXISTS Actions
     CONSTRAINT pk_action PRIMARY KEY (id ASC)
 );
 
+DROP TABLE IF EXISTS Months;
+CREATE TABLE IF NOT EXISTS Months
+(
+    /* Columns */
+    year                INTEGER UNSIGNED    NOT NULL,
+    month               INTEGER UNSIGNED    NOT NULL,
+    salary              INTEGER UNSIGNED    NOT NULL,
+    averageHoursGoal    INTEGER UNSIGNED    NOT NULL,
+
+    /* Constraints */
+    CONSTRAINT pk_months PRIMARY KEY (year ASC, month ASC)
+);
+
+DROP TABLE IF EXISTS Days;
+CREATE TABLE IF NOT EXISTS Days
+(
+    /* Columns */
+    year    INTEGER UNSIGNED    NOT NULL,
+    month   INTEGER UNSIGNED    NOT NULL,
+    day     INTEGER UNSIGNED    NOT NULL,
+    type    INTEGER UNSIGNED    NOT NULL, /* 0 - working day, 1 - holiday, 2 - vacation, 3 - sick leave */
+
+    /* Constraint */
+    CONSTRAINT fk_days_months FOREIGN KEY (year, month)
+        REFERENCES Months (year ASC, month ASC),
+    CONSTRAINT pk_days PRIMARY KEY (year ASC, month ASC, day ASC)
+);
+
 /*
 ========================================================================================================================
 = Storage procedures

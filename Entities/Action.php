@@ -10,17 +10,17 @@ class Action
     private string $startTime;
     private string $endTime;
 
-    /**
-     * @todo Add date and time format check
-     */
     public function __construct(int $id, string $taskUrl, string $date, string $startTime, string $endTime)
     {
+        // TODO: Add parameter validation
         $this->id = $id;
         $this->taskUrl = $taskUrl;
         $this->date = $date;
         $this->startTime = $startTime;
         $this->endTime = $endTime;
     }
+
+    // Getters / Setters
 
     public function getId(): int
     {
@@ -32,9 +32,10 @@ class Action
         return $this->taskUrl;
     }
 
-    public function setTaskUrl(string $url): void
+    public function setTaskUrl(string $taskUrl): void
     {
-        $this->taskUrl = $url;
+        // TODO: Add parameter validation
+        $this->taskUrl = $taskUrl;
     }
 
     public function getDate(): string
@@ -42,11 +43,9 @@ class Action
         return $this->date;
     }
 
-    /**
-     * @todo Add date format check
-     */
     public function setDate(string $date): void
     {
+        // TODO: Add parameter validation
         $this->date = $date;
     }
 
@@ -55,12 +54,10 @@ class Action
         return $this->startTime;
     }
 
-    /**
-     * @todo Add time format check
-     */
-    public function setStartTime(string $time): void
+    public function setStartTime(string $startTime): void
     {
-        $this->startTime = $time;
+        // TODO: Add parameter validation
+        $this->startTime = $startTime;
     }
 
     public function getEndTime(): string
@@ -68,53 +65,16 @@ class Action
         return $this->endTime;
     }
 
-    /**
-     * @todo Add time format check
-     */
-    public function setEndTime(string $time): void
+    public function setEndTime(string $endTime): void
     {
-        $this->endTime = $time;
+        // TODO: Add parameter validation
+        $this->endTime = $endTime;
     }
 
-    public function getElapsedSeconds(): int
-    {
-        $startTime = explode(":", $this->startTime);
-        $endTime = explode(":", $this->endTime);
-        return ($endTime[0] * 3600 + $endTime[1] * 60) - ($startTime[0] * 3600 + $startTime[1] * 60);
-    }
+    // Other functions
 
-    public function getElapsedHours(): int
+    public function getParamsArray(): array
     {
-        return intdiv($this->getElapsedSeconds(), 3600);
-    }
-
-    public function getElapsedMinutes(): int
-    {
-        return intdiv(($this->getElapsedSeconds() % 3600), 60);
-    }
-
-    public function getFormattedElapsedHours(): string
-    {
-        return str_pad($this->getElapsedHours(), 2, "0", STR_PAD_LEFT);
-    }
-
-    public function getFormattedElapsedMinutes(): string
-    {
-        return str_pad($this->getElapsedMinutes(), 2, "0", STR_PAD_LEFT);
-    }
-
-    public function getYear(): int
-    {
-        return date_parse($this->date)['year'];
-    }
-
-    public function getMonth(): int
-    {
-        return date_parse($this->date)['month'];
-    }
-
-    public function getDay(): int
-    {
-        return date_parse($this->date)['day'];
+        return [$this->id, $this->taskUrl, $this->date, $this->startTime, $this->endTime];
     }
 }
