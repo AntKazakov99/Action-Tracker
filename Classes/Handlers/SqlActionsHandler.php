@@ -35,7 +35,7 @@ class SqlActionsHandler implements \Tracker\Interfaces\ActionsHandler
             }
             return $result;
         }
-        throw new \RuntimeException('Failed to get action');
+        throw new \RuntimeException("Failed to get action. Error: {$this->mysqli->error}");
     }
 
     public function getActionsByMonth(int $year, int $month): array
@@ -57,7 +57,7 @@ class SqlActionsHandler implements \Tracker\Interfaces\ActionsHandler
             }
             return $result;
         }
-        throw new \RuntimeException('Failed to get actions');
+        throw new \RuntimeException("Failed to get action. Error: {$this->mysqli->error}");
     }
 
     public function getAllActions(): array
@@ -79,7 +79,7 @@ class SqlActionsHandler implements \Tracker\Interfaces\ActionsHandler
             }
             return $result;
         }
-        throw new \RuntimeException('Failed to get action');
+        throw new \RuntimeException("Failed to get action. Error: {$this->mysqli->error}");
     }
 
     // ADD / DELETE
@@ -87,15 +87,21 @@ class SqlActionsHandler implements \Tracker\Interfaces\ActionsHandler
     public function addAction(string $taskUrl, string $date, string $startTime, string $endTime): void
     {
         $query = "CALL StrProc_AddAction(\"{$taskUrl}\", \"{$date}\", \"{$startTime}\", \"{$endTime}\");";
-        // TODO: Change on mysqli->prepare
-        // TODO: Add exception if query failed
-        $this->mysqli->query($query);
+        if ($this->mysqli->query($query))
+        {
+            return;
+        }
+        throw new \RuntimeException("Failed to add action. Error: {$this->mysqli->error}");
     }
 
     public function deleteAction(int $id): void
     {
         $query = "CALL StrProc_DeleteAction(\"{$id}\");";
-        // TODO: Implement deleteAction() method.
+        if ($this->mysqli->query($query))
+        {
+            return;
+        }
+        throw new \RuntimeException("Failed to delete action. Error: {$this->mysqli->error}");
     }
 
     // UPDATE
@@ -103,6 +109,10 @@ class SqlActionsHandler implements \Tracker\Interfaces\ActionsHandler
     public function updateAction(int $id, string $taskUrl, string $date, string $startTime, string $endTime): void
     {
         $query = "CALL StrProc_UpdateAction(\"{$id}\", \"{$taskUrl}\", \"{$date}\", \"{$startTime}\", \"{$endTime}\")";
-        // TODO: Implement updateAction() method.
+        if ($this->mysqli->query($query))
+        {
+            return;
+        }
+        throw new \RuntimeException("Failed to update action. Error: {$this->mysqli->error}");
     }
 }

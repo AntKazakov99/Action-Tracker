@@ -16,6 +16,21 @@ $actionsHandler = new \Tracker\Classes\SqlActionsHandler(
     $configData['DatabaseConnectionData']['database']
 );
 
-// TODO: Add parameters check
-
-$actionsHandler->AddAction($_POST['taskUrl'], $_POST['date'], $_POST['startDate'], $_POST['endDate']);
+if (!array_key_exists('taskUrl', $_POST)
+    && !array_key_exists('date', $_POST)
+    && !array_key_exists('startTime', $_POST)
+    && !array_key_exists('endTime', $_POST))
+{
+    echo json_encode(['success' => false, 'error' => 'Failed to get POST parameters']);
+    die();
+}
+try
+{
+    $actionsHandler->addAction($_POST['taskUrl'], $_POST['date'], $_POST['startTime'], $_POST['endTime']);
+    echo json_encode(['success' => true]);
+}
+catch (RuntimeException $exception)
+{
+    echo json_encode(['success' => false, 'error' => $exception->getMessage()]);
+    die();
+}
